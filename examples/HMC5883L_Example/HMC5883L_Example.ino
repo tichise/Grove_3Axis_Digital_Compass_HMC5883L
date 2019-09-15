@@ -49,7 +49,9 @@ MagnetometerScaled valueOffset;
 //アウトセットアップルーチン、ここではマイクロコントローラーとコンパスを構成します。
 void setup()
 {
-  //シリアルポートを初期化します。  Serial.begin(115200);
+  //シリアルポートを初期化します。
+  Serial.begin(115200);
+
   delay(2000);
   Serial.println("Starting the I2C interface.");
   Wire.begin(); // Start the I2C interface.
@@ -221,6 +223,12 @@ void loop()
   //見出しを取得したら、「偏角」を追加する必要があります。「偏角」は、現在地の磁場の「誤差」です。
      //ここで見つけてください：http://www.magnetic-declination.com/
    //私の場合：-2��37 '-2.617度、または（必要な）-0.0456752665ラジアン、-0.0457を使用します
+
+      // Latitude: 35° 37' 28.9" N
+      // Longitude : 139° 37' 54.4" E
+      // Magnetic Declination: -7° 35'
+
+
    //赤緯が見つからない場合は、これら2行をコメントアウトすると、コンパスが少し外れます。
       float declinationAngle = -0.0457;
   heading += declinationAngle;
@@ -230,11 +238,16 @@ void loop()
     heading += 2 * PI;
 
   // 赤緯の追加によるラップを確認します。
-  // Check for wrap due to addition of declination.
   if (heading > 2 * PI)
     heading -= 2 * PI;
 
   //読みやすくするためにラジアンを度に変換します。
+
+  /*
+  ラジアン（英: radian, 記号: rad）は、国際単位系 (SI) における角度（平面角）の単位である。 
+  円周上でその円の半径と同じ長さの弧を切り取る2本の半径が成す角の値と定義される。 
+  弧度（こど）とも言い、平面角の大きさをラジアンで測ることを弧度法と呼ぶ。
+   */
   float headingDegrees = heading * 180 / M_PI;
 
   float yxHeadingDegrees = yxHeading * 180 / M_PI;

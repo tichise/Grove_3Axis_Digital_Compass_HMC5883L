@@ -67,18 +67,15 @@ int HMC5883L::getCompass()
     int MilliGauss_OnThe_XAxis = scaled.XAxis; // (or YAxis, or ZAxis)
 
     // 磁力計が水平になったら方位を計算し、軸の兆候を修正します。
+    // atan2（算術型の逆正接（アークタンジェント）を対辺と隣辺から求める。）
     float heading = atan2(scaled.YAxis, scaled.XAxis);
 
     // 見出しを取得したら、「偏角」を追加する必要があります。「偏角」は、現在地の磁場の「誤差」です。
     // ここで見つけてください：http://www.magnetic-declination.com/
     // 鉱山は-2 ?? 37 'で、これは-2.617度、または（必要な）-0.0456752665ラジアン、-0.0457を使用します
-         // 赤緯が見つからない場合は、これら2行をコメントアウトすると、コンパスが少し外れます。
+    // 赤緯が見つからない場合は、これら2行をコメントアウトすると、コンパスが少し外れます。
 
-        // Once you have your heading, you must then add your 'Declination Angle', which is the 'Error' of the magnetic field in your location.
-        // Find yours here: http://www.magnetic-declination.com/
-        // Mine is: -2??37' which is -2.617 Degrees, or (which we need) -0.0456752665 radians, I will use -0.0457
-        // If you cannot find your Declination, comment out these two lines, your compass will be slightly off.
-        float declinationAngle = -0.0457;
+    float declinationAngle = -0.0457;
     heading += declinationAngle;
 
     // 符号が逆になっている場合に修正します。
